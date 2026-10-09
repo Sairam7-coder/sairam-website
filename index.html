@@ -1,130 +1,24 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sairam Bandi - My Personal Website</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f2f2f2;
-      color: #333;
-    }
-    header {
-      background-color: #4CAF50;
-      color: white;
-      padding: 2rem;
-      text-align: center;
-    }
-    section {
-      padding: 2rem;
-      max-width: 800px;
-      margin: auto;
-      background: white;
-      margin-top: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    h2 {
-      color: #4CAF50;
-    }
-    footer {
-      text-align: center;
-      padding: 1rem;
-      background-color: #ddd;
-      margin-top: 2rem;
-    }
-    .button {
-      background-color: #4CAF50;
-      color: white;
-      padding: 0.6rem 1rem;
-      text-decoration: none;
-      border-radius: 5px;
-      display: inline-block;
-      margin-top: 1rem;
-    }
-  </style>
-</head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Sairam Bandi — Java Full Stack Developer portfolio, projects and Android apps.">
+<title>Sairam Bandi | Java Full Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080B14;--panel:#111827;--panel2:#151E30;--text:#F4F7FB;--muted:#A7B2C5;--line:#273449;--a:#22D3EE;--b:#818CF8;--max:1120px}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 78% 7%,#14294a 0%,#0b1120 34%,#080B14 68%),var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;line-height:1.6}a{color:inherit;text-decoration:none}.wrap{width:min(var(--max),calc(100% - 40px));margin:auto}.nav{position:sticky;top:0;z-index:20;background:#080B14e8;backdrop-filter:blur(14px);border-bottom:1px solid #ffffff0d}.navin{height:72px;display:flex;align-items:center;justify-content:space-between}.logo{font-family:'Space Grotesk';font-weight:700;font-size:20px}.logo span{color:var(--a)}.links{display:flex;gap:25px;color:#b9c7d9;font-size:14px}.links a:hover{color:white}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 17px;border-radius:10px;border:1px solid var(--line);background:#ffffff08;color:#fff;font-weight:600;font-size:14px}.btn.primary{background:linear-gradient(135deg,#22D3EE,#818CF8);color:#06131d;border:0}.hero{padding:95px 0 80px;display:grid;grid-template-columns:1.25fr .75fr;gap:60px;align-items:center}.eyebrow{color:var(--a);font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}.hero h1{font-family:'Space Grotesk';font-size:clamp(45px,7vw,76px);line-height:.98;margin:15px 0 22px;letter-spacing:-.045em}.hero h1 span{background:linear-gradient(90deg,#22D3EE,#818CF8);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{font-size:18px;color:var(--muted);max-width:690px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}.hero-photo{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center;border-radius:18px;margin-bottom:22px;border:1px solid var(--line);box-shadow:0 22px 55px #0006}.gallery{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;margin-top:28px}.gallery img{width:100%;height:100%;object-fit:cover;border-radius:16px;border:1px solid var(--line);display:block}.gallery-main{grid-row:span 2;min-height:470px}.gallery-side{height:228px}.project-media{width:100%;height:210px;object-fit:cover;border-radius:14px;margin:-2px 0 12px;border:1px solid var(--line);background:#07111f}.hero-card{border:1px solid var(--line);background:linear-gradient(145deg,#17243A,#101726);border-radius:24px;padding:28px;box-shadow:0 30px 80px #0005}.avatar{width:74px;height:74px;border-radius:20px;display:grid;place-items:center;background:linear-gradient(135deg,var(--a),var(--b));color:#06131d;font:800 28px 'Space Grotesk';margin-bottom:24px}.hero-card h3{font-family:'Space Grotesk';margin:0 0 6px;font-size:24px}.hero-card p{font-size:14px;margin:0 0 20px}.mini{display:grid;gap:12px}.mini div{padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:#ffffff04}.mini small{display:block;color:#758aa3;font-size:11px;text-transform:uppercase;letter-spacing:.08em}.mini strong{font-size:14px}.section{padding:82px 0}.section-head{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:28px}.kicker{color:var(--a);font-size:12px;text-transform:uppercase;letter-spacing:.14em;font-weight:700}.section h2{font-family:'Space Grotesk';font-size:40px;line-height:1.1;margin:8px 0}.section-intro{color:var(--muted);max-width:620px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{background:linear-gradient(145deg,#131D2D,#0D1422);border:1px solid var(--line);border-radius:18px;padding:24px}.card h3{font-family:'Space Grotesk';margin:12px 0 7px;font-size:21px}.card p{color:var(--muted);font-size:14px}.icon{width:45px;height:45px;border-radius:12px;display:grid;place-items:center;background:#ffffff08;border:1px solid var(--line);font-size:22px}.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}.tag{font-size:12px;color:#c7d4e5;background:#ffffff06;border:1px solid var(--line);padding:5px 9px;border-radius:999px}.project{display:flex;flex-direction:column;min-height:290px}.project .bottom{margin-top:auto;padding-top:18px;display:flex;gap:9px;flex-wrap:wrap}.featured{grid-column:span 2;border-color:#28516b;background:linear-gradient(145deg,#13263A,#0D1524)}.featured .icon{background:#123a40}.about{display:grid;grid-template-columns:.9fr 1.1fr;gap:45px}.facts{display:grid;grid-template-columns:1fr 1fr;gap:12px}.fact{border:1px solid var(--line);border-radius:14px;padding:17px;background:#ffffff03}.fact small{color:#71859d;display:block}.fact strong{font-size:15px}.timeline{border-left:1px solid var(--line);padding-left:25px}.timeline-item{position:relative;margin-bottom:28px}.timeline-item:before{content:'';position:absolute;left:-31px;top:8px;width:10px;height:10px;border-radius:50%;background:var(--a);box-shadow:0 0 0 5px #62e6c51a}.timeline-item h3{margin:0;font-family:'Space Grotesk'}.timeline-item p{margin:5px 0;color:var(--muted)}.contact{border:1px solid var(--line);border-radius:24px;padding:35px;background:linear-gradient(120deg,#17243A,#0D1422);display:flex;justify-content:space-between;gap:30px;align-items:center}.contact p{color:var(--muted)}footer{border-top:1px solid var(--line);padding:28px 0;color:#71859d;font-size:13px;display:flex;justify-content:space-between;gap:20px}.mobile{display:none}@media(max-width:850px){.gallery{grid-template-columns:1fr 1fr}.gallery-main{grid-row:auto;min-height:320px}.gallery-side{height:220px}.links{display:none}.mobile{display:block}.hero{grid-template-columns:1fr;padding-top:65px}.grid{grid-template-columns:1fr 1fr}.featured{grid-column:span 2}.about{grid-template-columns:1fr}.contact{display:block}}@media(max-width:580px){.gallery{grid-template-columns:1fr}.gallery-main,.gallery-side{height:320px}.wrap{width:min(var(--max),calc(100% - 28px))}.hero h1{font-size:48px}.grid{grid-template-columns:1fr}.featured{grid-column:span 1}.facts{grid-template-columns:1fr}.section{padding:60px 0}.section h2{font-size:33px}.hero-card{padding:22px}footer{display:block}.contact .actions{margin-bottom:0}}
+
+.btn{transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}.btn:hover{transform:translateY(-2px);border-color:#22D3EE;box-shadow:0 8px 24px #22D3EE18}.btn.primary{background:linear-gradient(115deg,#22D3EE,#818CF8);box-shadow:0 8px 26px #22D3EE20}.links a:hover,.logo:hover{color:#22D3EE}.card,.hero-card,.contact{box-shadow:0 18px 50px #00000022}.card:hover{border-color:#22D3EE55;transform:translateY(-3px);transition:transform .2s ease,border-color .2s ease}.card{transition:transform .2s ease,border-color .2s ease}.tag{color:#D4E4F5}.kicker,.eyebrow{color:#22D3EE}.timeline-item:before{background:#22D3EE;box-shadow:0 0 0 5px #22D3EE20}.hero-photo{box-shadow:0 22px 65px #0008;border-color:#334155}
+</style></head>
 <body>
-  <header>
-    <h1>Hi, I'm Sairam Bandi</h1>
-    <p>Java Full Stack Developer | AI Enthusiast</p>
-  </header>
-
-  <section>
-    <h2>Career Objective</h2>
-    <p>
-    Aspiring Software Developer with hands-on experience in front-end development using Angular. Committed to continuous learning, innovation, and delivering high-quality solutions in a dynamic IT environment. Seeking a challenging opportunity to grow and contribute meaningfully to the organization.  
-    </p>
-
-    <h2>Professional Summary</h2>
-    <ul>
-      <li>6 months of real-time experience as a Front-End Developer with Angular.</li>
-      <li>Skilled in developing responsive and time-critical web applications.</li>
-      <li>Strong problem-solving, communication, and teamwork abilities.</li>
-      <li>Fast learner with a positive attitude and dedication to delivering efficient, scalable solutions.</li>
-    </ul>
-
-    <h2>Profesional Experience</h2>
-    <p>Jr. Angular Developer</p>
-    <p>ANV Soft Solutions - April 2024 to September 2024</p>
-    <ul>
-      <li>Developed and maintained dynamic web applications using Angular.</li>
-      <li>Collaborated with cross-functional teams to create seamless user experiences.</li>
-      <li>Delivered high-quality, performance-optimized front-end solutions.</li>
-    </ul>
-
-    <h2>Acadenic Profile</h2>
-    <ul>
-      <li>MCA (2021) – S.V.K.P & Dr. K.S. Raju Arts & Science College, Penugonda (AKNU University)</li>
-      <li>B.Sc. in Computer Science (2018) – Aditya Degree College, Palakollu (AKNU University)</li>
-      <li>Intermediate (2015) – Sri Gowthami Junior College, Palakollu</li>
-      <li>SSC (2012) – Z.P.P High School, Medapadu</li>
-    </ul>
-
-    <h2>Technical Skills</h2>
-    <ul>
-      <li>Languages: Java</li>
-      <li>Technologies: Angular 15, HTML5, CSS3, JavaScript, TypeScript</li>
-      <li>Databases: MySQL</li>
-      <li>Tools: Eclipse</li>
-      <li>IDEs: Visual Studio (2015, 2017, 2019, 2022)</li>
-    </ul>
-
-    <h2>Projects</h2>
-    <h5>1.SYm Technologies</h5>
-    <p>Client: Yashwanth Yadav | Duration: May 2024 - July 2024</p>
-    <p>Technologies:HTML,CSS,JavaScript</p>
-    <p>Description: Developed a responsive consulting firm website connecting job seekers and recruiters.</p>
-    <ul>
-      <li>Developed interactive UI components.</li>
-      <li>Worked closely with design and backend teams for smooth integration.</li>
-    </ul>
-
-    <h5>2.My Home Services (MHS)</h5>
-    <p>Client:In My Training | Duration: June 2023 – August 2023</p>
-    <p>Technologies:Angular 15, MySQL, Spring Boot</p>
-    <p>Description: Built a web platform offering home services like electricians and plumbers.</p>
-    <ul>
-      <li>Designed and implemented intuitive front-end with Angular.</li>
-      <li>Integrated frontend with backend APIs using Spring Boot.</li>
-      <li>Managed database operations with MySQL.</li>
-    </ul>
-
-    <h2>Training & Certification</h2>
-    <p>Java Full Stack Developer Certification — NSE TalentSprint, Hyderabad</p>
-    <p>Trained in front-end and back-end development, focusing on building modern web applications using Java, Spring Boot, Angular, MySQL, HTML, CSS, and JavaScript.</p>
-
-    <h2>Contact</h2>
-    <p>Email: sairambandi777@gmail.com</p>
-    <p>Phone: +91 9676477757</p>
-    <a href="mailto:sairambandi777@gmail.com" class="button">Send Email</a>
-  </section>
-
-  <footer>
-    © 2025 Sairam Bandi. All rights reserved.
-  </footer>
-</body>
-</html>
+<nav class="nav"><div class="wrap navin"><a class="logo" href="#home">Sairam Bandi<span>.</span></a><div class="links"><a href="#about">About</a><a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#experience">Journey</a><a href="#contact">Contact</a></div><a class="btn primary mobile" href="#projects">Projects</a></div></nav>
+<main>
+<section class="wrap hero" id="home"><div><div class="eyebrow">Java Full Stack Developer · Hyderabad</div><h1>Building useful software with <span>clean code.</span></h1><p>I'm Sairam Bandi, a passionate developer focused on Java, Spring Boot, Angular and MySQL. I enjoy turning practical ideas into simple, user-friendly applications.</p><div class="actions"><a class="btn primary" href="#projects">Explore my projects →</a><a class="btn" href="assets/Sairam-Bandi-Resume.pdf" download>Download Resume</a></div></div><aside class="hero-card"><img class="hero-photo" src="assets/images/profile-hero.jpeg" alt="Sairam Bandi profile photo"><div class="avatar">SB</div><h3>Sairam Bandi</h3><p>Java Full Stack Developer</p><div class="mini"><div><small>Core stack</small><strong>Java · Spring Boot · Angular · MySQL</strong></div><div><small>Location</small><strong>Hyderabad, India</strong></div><div><small>Open to</small><strong>Software development opportunities</strong></div></div></aside></section>
+<section class="section" id="about"><div class="wrap"><div class="section-head"><div><div class="kicker">About me</div><h2>Developer with a practical mindset.</h2></div><p class="section-intro">I like building applications that solve real problems, while continuously improving my full-stack skills.</p></div><div class="about"><div><div class="facts"><div class="fact"><small>Education</small><strong>MCA (2021) · B.Sc. Computer Science (2018)</strong></div><div class="fact"><small>Certification</small><strong>Java Full Stack Developer · 2023</strong></div><div class="fact"><small>Languages</small><strong>English · Telugu</strong></div><div class="fact"><small>Focus</small><strong>Full-stack & UI development</strong></div></div><div class="gallery"><img class="gallery-main" src="assets/images/profile-standing.jpeg" alt="Sairam Bandi standing portrait"><img class="gallery-side" src="assets/images/profile-seated.jpeg" alt="Sairam Bandi seated portrait"><img class="gallery-side" src="assets/images/profile-thinking.jpeg" alt="Sairam Bandi portrait"></div></div><div><p>My background includes frontend projects, full-stack applications, and interactive game development. I am especially interested in creating reliable backend APIs and polished user experiences.</p><p>Outside the standard portfolio projects, I'm also building a <strong>Tailoring Billing System</strong> that I plan to evolve into a production-ready application.</p></div></div></div></section>
+<section class="section" id="skills"><div class="wrap"><div class="section-head"><div><div class="kicker">Technical skills</div><h2>Tools I work with.</h2></div></div><div class="grid"><article class="card"><div class="icon">☕</div><h3>Backend</h3><p>Java development and REST API implementation with Spring Boot.</p><div class="tags"><span class="tag">Java</span><span class="tag">Spring Boot</span><span class="tag">REST API</span><span class="tag">JSP</span><span class="tag">Servlets</span></div></article><article class="card"><div class="icon">◈</div><h3>Frontend</h3><p>Responsive interfaces and interactive web experiences.</p><div class="tags"><span class="tag">Angular</span><span class="tag">JavaScript</span><span class="tag">HTML</span><span class="tag">CSS</span></div></article><article class="card"><div class="icon">▣</div><h3>Data & Tools</h3><p>Database work, API testing and source control.</p><div class="tags"><span class="tag">MySQL</span><span class="tag">Git</span><span class="tag">GitHub</span><span class="tag">Postman</span><span class="tag">VS Code</span></div></article></div></div></section>
+<section class="section" id="projects"><div class="wrap"><div class="section-head"><div><div class="kicker">Selected work</div><h2>Projects that show what I build.</h2></div><a class="btn" href="https://github.com/Sairam7-coder" target="_blank" rel="noreferrer">GitHub ↗</a></div><div class="grid"><article class="card project featured"><img class="project-media" src="assets/projects/stress-burst.png" alt="Stress Burst game preview"><div class="icon">🎮</div><h3>Stress Burst — 3D Bubble Burst Game</h3><p>An interactive game with animations, sound effects, scoring and mobile touch support. The Android APK is available directly from this portfolio.</p><div class="tags"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">Android APK</span></div><div class="bottom"><a class="btn primary" href="assets/Stress-Burst.apk" download>⬇ Download APK</a><a class="btn" href="https://github.com/Sairam7-coder" target="_blank" rel="noreferrer">View GitHub</a></div></article><article class="card project"><img class="project-media" src="assets/projects/tailoring-dashboard.png" alt="Tailoring Billing System dashboard preview"><div class="icon">✂</div><h3>Tailoring Billing System</h3><p>A practical billing and shop-management project with bills, deliveries, trials, due payments, customers and reporting. This project will keep evolving.</p><div class="tags"><span class="tag">Web App</span><span class="tag">Billing</span><span class="tag">Management</span></div><div class="bottom"><a class="btn primary" href="projects/tailoring/index.html" target="_blank">Open Demo</a></div></article><article class="card project"><div class="icon">🏠</div><h3>My Home Services</h3><p>A home-service booking platform for services such as cleaning and plumbing, with Angular, Spring Boot, MySQL and REST APIs.</p><div class="tags"><span class="tag">Angular</span><span class="tag">Spring Boot</span><span class="tag">MySQL</span></div></article><article class="card project"><div class="icon">🥩</div><h3>Meet to Meat</h3><p>My first web development project: a responsive online meat-ordering interface focused on clean navigation and product presentation.</p><div class="tags"><span class="tag">HTML</span><span class="tag">CSS</span></div></article></div></div></section>
+<section class="section" id="experience"><div class="wrap"><div class="section-head"><div><div class="kicker">My journey</div><h2>Education & growth.</h2></div></div><div class="timeline"><div class="timeline-item"><h3>Java Full Stack Developer Certification</h3><p>NSE TalentSprint, Gachibowli, Telangana · 2023</p></div><div class="timeline-item"><h3>Master of Computer Applications (MCA)</h3><p>Adikavi Nannaya University · 2021</p></div><div class="timeline-item"><h3>Bachelor of Science (B.Sc.) — Computer Science</h3><p>Adikavi Nannaya University · 2018</p></div></div></div></section>
+<section class="section" id="contact"><div class="wrap"><div class="contact"><div><div class="kicker">Let's connect</div><h2>Have an idea or opportunity?</h2><p>I'm open to software development opportunities and interesting projects.</p></div><div class="actions"><a class="btn primary" href="mailto:sairambandi777@gmail.com">Email me</a><a class="btn" href="https://www.linkedin.com/in/sairam-bandi-b50059332" target="_blank" rel="noreferrer">LinkedIn ↗</a><a class="btn" href="https://github.com/Sairam7-coder" target="_blank" rel="noreferrer">GitHub ↗</a></div></div></div></section>
+</main><footer class="wrap"><span>© 2026 Sairam Bandi. Built with purpose.</span><span>Java · Spring Boot · Angular · MySQL</span></footer>
+</body></html>
