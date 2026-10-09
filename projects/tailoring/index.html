@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tailoring Billing System - V1</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;color:#1f2937}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.login{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#166534,#15803d)}
+.login-card{background:#fff;width:min(420px,92%);padding:32px;border-radius:16px;box-shadow:0 20px 50px #0003}
+.login-card h1{margin:0 0 6px}.login-card p{color:#6b7280}.field{margin:12px 0}.field label{display:block;font-weight:600;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px}
+.primary{background:#15803d;color:#fff;border:0;border-radius:8px;padding:11px 16px;font-weight:600}.secondary{background:#e5e7eb;border:0;border-radius:8px;padding:10px 14px}.danger{background:#dc2626;color:#fff;border:0;border-radius:8px;padding:9px 13px}
+.hidden{display:none!important}.app{display:flex;min-height:100vh}.sidebar{width:235px;background:#14532d;color:white;padding:18px}.brand{font-size:21px;font-weight:700;margin-bottom:24px}.nav button{display:block;width:100%;text-align:left;background:transparent;color:white;border:0;padding:12px;border-radius:8px;margin:3px 0}.nav button.active,.nav button:hover{background:#166534}.main{flex:1}.topbar{background:#fff;padding:14px 22px;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center}.content{padding:22px}.page{display:none}.page.active{display:block}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:#fff;border-radius:12px;padding:18px;border:1px solid #e5e7eb}.card small{color:#6b7280}.card h2{margin:8px 0 0}.panel{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:18px;margin-top:18px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.clothes{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.clothes .field{margin:0}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}table{width:100%;border-collapse:collapse;background:#fff}th,td{padding:9px;border-bottom:1px solid #e5e7eb;text-align:left;font-size:14px}th{background:#f9fafb}.scroll{overflow:auto}.pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#dcfce7;color:#166534;font-size:12px}.due{color:#b91c1c;font-weight:700}.muted{color:#6b7280}.searchrow{display:flex;gap:8px;margin-bottom:12px}.searchrow input{flex:1;padding:10px;border:1px solid #d1d5db;border-radius:8px}
+@media(max-width:900px){.sidebar{width:190px}.cards{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:repeat(2,1fr)}.clothes{grid-template-columns:repeat(2,1fr)}}
+#printBill{display:none}
+@media print{
+  @page{size:A5 portrait;margin:5mm}
+  html,body{width:148mm!important;height:210mm!important;margin:0!important;padding:0!important;background:#fff!important;overflow:hidden!important}
+  body *{visibility:hidden!important}
+  #printBill,#printBill *{visibility:visible!important}
+  #printBill{display:block!important;position:absolute!important;left:0!important;top:0!important;width:138mm!important;height:200mm!important;max-height:200mm!important;overflow:hidden!important;padding:0!important;margin:0!important;font-family:Arial,Helvetica,sans-serif;color:#111;font-size:9px!important;line-height:1.15!important}
+  .print-head{text-align:center;border-bottom:1px solid #111;padding-bottom:3px;margin-bottom:4px}
+  .print-head h1{font-size:16px;margin:0 0 2px}.print-head p{margin:1px 0;font-size:9px}
+  .print-meta{display:grid;grid-template-columns:1fr 1fr;gap:2px 5px;font-size:8.5px;margin-bottom:4px}
+  .print-table{width:100%;border-collapse:collapse;font-size:8.5px}.print-table th,.print-table td{border:1px solid #333;padding:2px 3px}.print-table th{background:#eee}
+  .print-total{margin-top:4px;margin-left:auto;width:55%;font-size:9px}.print-total div{display:flex;justify-content:space-between;padding:1px 0}
+  .print-footer{text-align:center;font-size:8px;margin-top:5px;border-top:1px solid #333;padding-top:3px}
+  #printBill>div{break-inside:avoid;page-break-inside:avoid}
+  .print-table{break-inside:auto;page-break-inside:auto}
+  .print-table tr{break-inside:avoid;page-break-inside:avoid}
+}
+@media(max-width:650px){.app{display:block}.sidebar{width:100%;padding:10px}.nav{display:flex;overflow:auto}.nav button{min-width:max-content}.cards,.grid{grid-template-columns:1fr}.content{padding:12px}}
+</style>
+</head>
+<body>
+
+<div id="login" class="login">
+  <div class="login-card">
+    <h1>Tailoring Billing</h1>
+    <p>Version 1 prototype</p>
+    <div class="field"><label>Username</label><input id="username" value="admin"></div>
+    <div class="field"><label>Password</label><input id="password" type="password" value="admin123"></div>
+    <button class="primary" style="width:100%" onclick="login()">Login</button>
+    <p style="font-size:12px;margin-top:14px">Demo login: <b>admin</b> / <b>admin123</b></p>
+  </div>
+</div>
+
+<div id="app" class="app hidden">
+  <aside class="sidebar">
+    <div class="brand">✂ Tailoring Billing</div>
+    <div class="nav">
+      <button class="active" onclick="showPage('dashboard',this)">Dashboard</button>
+      <button onclick="showPage('newbill',this)">New Bill</button>
+      <button onclick="showPage('bills',this)">Bills</button>
+      <button onclick="showPage('deliveries',this)">Today's Deliveries</button>
+      <button onclick="showPage('trials',this)">Today's Trials</button>
+      <button onclick="showPage('dues',this)">Due Payments</button>
+      <button onclick="showPage('reports',this)">Date Reports</button>
+      <button onclick="showPage('customers',this)">Customers</button>
+    </div>
+  </aside>
+  <main class="main">
+    <div class="topbar"><b id="pageTitle">Dashboard</b><span>Admin &nbsp; | &nbsp;<button class="secondary" onclick="logout()">Logout</button></span></div>
+    <div class="content">
+
+      <section id="dashboard" class="page active">
+        <div class="cards">
+          <div class="card"><small>Today's Bills</small><h2 id="dBills">0</h2></div>
+          <div class="card"><small>Today's Collection</small><h2 id="dCollection">₹0</h2></div>
+          <div class="card"><small>Today's Deliveries</small><h2 id="dDeliveries">0</h2></div>
+          <div class="card"><small>Total Due</small><h2 id="dDue">₹0</h2></div>
+        </div>
+        <div class="panel"><h3>Quick Actions</h3><div class="actions">
+          <button class="primary" onclick="showPage('newbill')">+ New Bill</button>
+          <button class="secondary" onclick="showPage('dues')">View Due Payments</button>
+          <button class="secondary" onclick="showPage('deliveries')">Today's Deliveries</button><button class="secondary" onclick="showPage('trials')">Today's Trials</button>
+        </div></div>
+      </section>
+
+      <section id="newbill" class="page">
+        <div class="panel">
+          <h2>New Bill</h2>
+          <div class="grid">
+            <div class="field"><label>Order No</label><input id="orderNo" readonly></div>
+            <div class="field"><label>Date</label><input id="billDate" type="date"></div>
+            <div class="field"><label>Customer Name</label><input id="customerName"></div>
+            <div class="field"><label>Contact</label><input id="contact"></div>
+            <div class="field"><label>Remark</label><input id="remark"></div>
+            <div class="field"><label>Delivery Date</label><input id="deliveryDate" type="date"></div>
+            <div class="field"><label>Trial Date</label><input id="trialDate" type="date"></div>
+          </div>
+          <h3>Clothes / Quantity</h3>
+          <div class="clothes" id="clothes"></div>
+          <div class="grid" style="margin-top:15px">
+            <div class="field"><label>Total Qty</label><input id="qty" readonly></div>
+            <div class="field"><label>Bill Amount</label><input id="billAmt" type="number" min="0" oninput="calcDue()"></div>
+            <div class="field"><label>Paid Amount</label><input id="paid" type="number" min="0" oninput="calcDue()"></div>
+            <div class="field"><label>Due</label><input id="due" readonly></div>
+            <div class="field"><label>Payment Method</label><select id="payment"><option>Cash</option><option>Card</option><option>UPI</option></select></div>
+            <div class="field"><label>Paid Date</label><input id="paidDate" type="date"></div>
+          </div>
+          <div class="actions"><button id="saveBillBtn" class="primary" onclick="window.editingOrderNo ? updateBill(false) : saveBill(false)">Save Bill</button><button id="savePrintBtn" class="primary" onclick="window.editingOrderNo ? updateBill(true) : saveBill(true)">💾 Save & Print A5</button><button id="clearBillBtn" class="secondary" onclick="resetBill()">Clear</button><button id="cancelEditBtn" class="danger hidden" onclick="cancelEdit()">Cancel Edit</button></div>
+        </div>
+      </section>
+
+      <section id="bills" class="page">
+        <div class="panel"><h2>Bills</h2><div class="searchrow"><input id="billSearch" placeholder="Search order, name or mobile" oninput="renderBills()"></div><div class="scroll"><table><thead><tr><th>Order</th><th>Date</th><th>Customer</th><th>Qty</th><th>Bill</th><th>Paid</th><th>Due</th><th>Status</th><th>Delivery</th><th>Delivered Date</th><th>Action</th></tr></thead><tbody id="billTable"></tbody></table></div></div>
+      </section>
+
+      <section id="deliveries" class="page">
+        <div class="panel"><h2>Today's Deliveries</h2><div class="scroll"><table><thead><tr><th>Order</th><th>Customer</th><th>Contact</th><th>Bill</th><th>Due</th><th>Status</th><th>Action</th></tr></thead><tbody id="deliveryTable"></tbody></table></div></div>
+      </section>
+
+      <section id="trials" class="page">
+        <div class="panel"><h2>Today's Trials</h2><div class="scroll"><table><thead><tr><th>Order</th><th>Customer</th><th>Contact</th><th>Trial Date</th><th>Delivery</th><th>Status</th><th>Action</th></tr></thead><tbody id="trialTable"></tbody></table></div></div>
+      </section>
+
+      <section id="dues" class="page">
+        <div class="panel"><h2>Due Payments</h2><div class="scroll"><table><thead><tr><th>Order</th><th>Date</th><th>Customer</th><th>Contact</th><th>Bill</th><th>Paid</th><th>Due</th><th>Action</th></tr></thead><tbody id="dueTable"></tbody></table></div></div>
+      </section>
+
+      <section id="reports" class="page">
+        <div class="panel"><h2>Date-to-Date Report</h2><div class="grid">
+          <div class="field"><label>From</label><input id="fromDate" type="date"></div>
+          <div class="field"><label>To</label><input id="toDate" type="date"></div>
+        </div><div class="actions"><label style="display:flex;align-items:center;gap:7px"><input id="showCancelledReports" type="checkbox" checked> Show Cancelled Bills</label><button class="primary" onclick="renderReport()">Search</button><button class="secondary" onclick="exportReportExcel()">📥 Export Excel</button></div>
+        <div id="reportSummary" style="margin-top:15px"></div>
+        <div class="scroll"><table><thead><tr><th>Order</th><th>Date</th><th>Customer</th><th>Qty</th><th>Bill</th><th>Paid</th><th>Due</th><th>Status</th></tr></thead><tbody id="reportTable"></tbody></table></div></div>
+      </section>
+
+      <section id="customers" class="page">
+        <div class="panel"><h2>Customers</h2><div class="searchrow"><input id="customerSearch" placeholder="Search customer or mobile" oninput="renderCustomers()"></div><div class="scroll"><table><thead><tr><th>Name</th><th>Contact</th><th>Orders</th><th>Total Bill</th><th>Total Due</th></tr></thead><tbody id="customerTable"></tbody></table></div></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div id="printBill"></div>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<script>
+const clothes = ["Shirt","Trouser","Suit","Jodhpuri","Sherwani","Modi Coat","Safari","Blazer","Kurtha","Pyjama","Others"];
+let bills = JSON.parse(localStorage.getItem("tailorBills") || "[]");
+
+function today(){return new Date().toISOString().slice(0,10)}
+function money(n){return "₹"+Number(n||0).toLocaleString("en-IN")}
+function getDue(b){return Math.max(0,Number(b.billAmt||0)-Number(b.paid||0))}
+function login(){
+  if(document.getElementById("username").value==="admin" && document.getElementById("password").value==="admin123"){
+    sessionStorage.setItem("loggedIn","1"); document.getElementById("login").classList.add("hidden"); document.getElementById("app").classList.remove("hidden"); init();
+  } else alert("Invalid demo login.");
+}
+function logout(){sessionStorage.removeItem("loggedIn");location.reload()}
+function showPage(id,btn){
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
+  if(btn)btn.classList.add("active");
+  document.getElementById("pageTitle").textContent=id==="newbill"?"New Bill":id==="dues"?"Due Payments":id==="deliveries"?"Today's Deliveries":id==="trials"?"Today's Trials":id==="reports"?"Date-to-Date Reports":id.charAt(0).toUpperCase()+id.slice(1);
+  if(id==="dashboard")updateDashboard();
+  if(id==="bills")renderBills();
+  if(id==="deliveries")renderDeliveries();
+  if(id==="trials")renderTrials();
+  if(id==="dues")renderDues();
+  if(id==="customers")renderCustomers();
+}
+function init(){
+  const box=document.getElementById("clothes");
+  box.innerHTML=clothes.map((c,i)=>`<div class="field"><label>${c}</label><input class="cq" data-name="${c}" type="number" min="0" value="0" oninput="calcQty()"></div>`).join("");
+  resetBill(); updateDashboard(); renderBills(); renderDeliveries(); renderTrials(); renderDues(); renderCustomers();
+}
+function resetBill(){
+  document.getElementById("orderNo").value=nextOrder();
+  document.getElementById("billDate").value=today();
+  document.getElementById("paidDate").value=today();
+  document.getElementById("deliveryDate").value=today();
+  document.getElementById("trialDate").value="";
+  ["customerName","contact","remark","billAmt","paid"].forEach(id=>document.getElementById(id).value="");
+  document.querySelectorAll(".cq").forEach(x=>x.value=0);
+  calcQty();calcDue();
+}
+function nextOrder(){
+  const max=bills.reduce((m,b)=>Math.max(m,Number(b.orderNo)||0),3115);
+  return max+1;
+}
+function calcQty(){document.getElementById("qty").value=[...document.querySelectorAll(".cq")].reduce((s,x)=>s+Number(x.value||0),0)}
+function calcDue(){const b=Number(document.getElementById("billAmt").value||0),p=Number(document.getElementById("paid").value||0);document.getElementById("due").value=Math.max(0,b-p)}
+function saveBill(printAfter=false){
+  const name=document.getElementById("customerName").value.trim();
+  if(!name)return alert("Enter customer name.");
+  const amount=Number(document.getElementById("billAmt").value||0), paid=Number(document.getElementById("paid").value||0);
+  if(paid>amount)return alert("Paid amount cannot be greater than bill amount.");
+  const items={};document.querySelectorAll(".cq").forEach(x=>items[x.dataset.name]=Number(x.value||0));
+  const b={orderNo:document.getElementById("orderNo").value,date:document.getElementById("billDate").value,name,contact:document.getElementById("contact").value,remark:document.getElementById("remark").value,items,qty:Number(document.getElementById("qty").value||0),billAmt:amount,paid, due:Math.max(0,amount-paid),payment:document.getElementById("payment").value,paidDate:document.getElementById("paidDate").value,trialDate:document.getElementById("trialDate").value,deliveryDate:document.getElementById("deliveryDate").value,deliveredDate:"",status:"Pending"};
+  bills.push(b);localStorage.setItem("tailorBills",JSON.stringify(bills));
+  if(printAfter){ printBill(b.orderNo); } else { alert("Bill saved successfully. Order No: "+b.orderNo); }
+  resetBill();renderBills();renderDeliveries();renderTrials();renderDues();renderCustomers();renderReport();updateDashboard();
+}
+function renderBills(){
+  const q=(document.getElementById("billSearch")?.value||"").toLowerCase();
+  const rows=bills.filter(b=>[b.orderNo,b.name,b.contact].join(" ").toLowerCase().includes(q));
+  document.getElementById("billTable").innerHTML=rows.map(b=>`<tr><td>${b.orderNo}</td><td>${b.date}</td><td>${b.name}</td><td>${b.qty}</td><td>${money(b.billAmt)}</td><td>${money(b.paid)}</td><td class="${b.due?'due':''}">${money(getDue(b))}</td><td><span class="pill" style="${b.status==='Cancelled'?'background:#fee2e2;color:#991b1b':''}">${b.status||'Pending'}</span></td><td>${b.deliveryDate||"-"}</td><td>${b.deliveredDate||"-"}</td><td><button class="secondary" onclick="editBill('${b.orderNo}')">Edit</button> <button class="secondary" onclick="printBill('${b.orderNo}')">Print A5</button> ${b.status!=='Cancelled' ? `<button class="danger" onclick="cancelBill('${b.orderNo}')">Cancel</button>` : `<span class="muted">Cancelled</span>`}</td></tr>`).join("")||emptyRow(11);
+}
+function renderDeliveries(){
+  const t=today(), rows=bills.filter(b=>b.deliveryDate===t && b.status!=="Cancelled" && b.status!=="Delivered");
+  document.getElementById("deliveryTable").innerHTML=rows.map(b=>`<tr><td>${b.orderNo}</td><td>${b.name}</td><td>${b.contact}</td><td>${money(b.billAmt)}</td><td class="${b.due?'due':''}">${money(getDue(b))}</td><td><span class="pill">${b.status}</span></td><td><button class="primary" onclick="deliver('${b.orderNo}')">Delivered</button> <button class="secondary" onclick="editBill('${b.orderNo}')">Edit</button> <button class="secondary" onclick="printBill('${b.orderNo}')">Print A5</button></td></tr>`).join("")||emptyRow(7);
+}
+function renderTrials(){
+  const t=today(), rows=bills.filter(b=>b.trialDate===t && b.status!=="Cancelled" && b.status!=="Delivered");
+  document.getElementById("trialTable").innerHTML=rows.map(b=>`<tr><td>${b.orderNo}</td><td>${b.name}</td><td>${b.contact}</td><td>${b.trialDate}</td><td>${b.deliveryDate||"-"}</td><td><span class="pill">${b.status}</span></td><td><button class="secondary" onclick="editBill('${b.orderNo}')">Edit</button> <button class="secondary" onclick="printBill('${b.orderNo}')">Print A5</button></td></tr>`).join("")||emptyRow(7);
+}
+function deliver(no){const b=bills.find(x=>String(x.orderNo)===String(no));if(b&&b.status!=="Cancelled"){b.status="Delivered";b.deliveredDate=today();localStorage.setItem("tailorBills",JSON.stringify(bills));renderDeliveries();renderTrials();renderBills();updateDashboard()}}
+function editBill(no){
+  const b=bills.find(x=>String(x.orderNo)===String(no)); if(!b)return;
+  showPage("newbill");
+  document.getElementById("orderNo").value=b.orderNo;
+  document.getElementById("billDate").value=b.date||today();
+  document.getElementById("customerName").value=b.name||"";
+  document.getElementById("contact").value=b.contact||"";
+  document.getElementById("remark").value=b.remark||"";
+  document.getElementById("deliveryDate").value=b.deliveryDate||"";
+  document.getElementById("trialDate").value=b.trialDate||"";
+  document.getElementById("billAmt").value=b.billAmt||0;
+  document.getElementById("paid").value=b.paid||0;
+  document.getElementById("payment").value=b.payment||"Cash";
+  document.getElementById("paidDate").value=b.paidDate||today();
+  document.querySelectorAll(".cq").forEach(x=>x.value=Number((b.items||{})[x.dataset.name]||0));
+  calcQty();calcDue();
+  window.editingOrderNo=String(b.orderNo);
+  // Preserve the existing status (including Cancelled) when editing.
+  document.querySelector('#saveBillBtn').textContent="Update Bill";
+  document.querySelector('#savePrintBtn').textContent="💾 Update & Print A5";
+  document.getElementById("clearBillBtn").classList.add("hidden");
+  document.getElementById("cancelEditBtn").classList.remove("hidden");
+}
+function updateBill(printAfter=false){
+  const no=window.editingOrderNo; const b=bills.find(x=>String(x.orderNo)===String(no)); if(!b)return;
+  const amount=Number(document.getElementById("billAmt").value||0), paid=Number(document.getElementById("paid").value||0), items={};
+  document.querySelectorAll(".cq").forEach(x=>items[x.dataset.name]=Number(x.value||0));
+  if(paid>amount)return alert("Paid amount cannot be greater than bill amount.");
+  Object.assign(b,{date:document.getElementById("billDate").value,name:document.getElementById("customerName").value.trim(),contact:document.getElementById("contact").value,remark:document.getElementById("remark").value,deliveryDate:document.getElementById("deliveryDate").value,trialDate:document.getElementById("trialDate").value,items,qty:Number(document.getElementById("qty").value||0),billAmt:amount,paid,due:Math.max(0,amount-paid),payment:document.getElementById("payment").value,paidDate:document.getElementById("paidDate").value});
+  localStorage.setItem("tailorBills",JSON.stringify(bills));
+  if(printAfter){ printBill(b.orderNo); } else { alert("Bill updated successfully."); }
+  window.editingOrderNo=null; document.querySelector('#saveBillBtn').textContent="Save Bill";
+  document.querySelector('#savePrintBtn').textContent="💾 Save & Print A5";
+  document.getElementById("clearBillBtn").classList.remove("hidden");
+  document.getElementById("cancelEditBtn").classList.add("hidden");
+  resetBill(); renderBills();renderDeliveries();renderTrials();renderDues();renderCustomers();renderReport();updateDashboard();
+}
+function cancelEdit(){
+  if(!window.editingOrderNo)return;
+  window.editingOrderNo=null;
+  document.getElementById("saveBillBtn").textContent="Save Bill";
+  document.getElementById("savePrintBtn").textContent="💾 Save & Print A5";
+  document.getElementById("clearBillBtn").classList.remove("hidden");
+  document.getElementById("cancelEditBtn").classList.add("hidden");
+  resetBill();
+  alert("Edit cancelled. No changes were saved.");
+}
+function printBill(no){
+  const b=bills.find(x=>String(x.orderNo)===String(no)); if(!b)return;
+  const itemRows=clothes.map(c=>{const q=Number((b.items||{})[c]||0);return q?`<tr><td>${c}</td><td style="text-align:center">${q}</td></tr>`:""}).join("") || '<tr><td>Tailoring</td><td style="text-align:center">'+(b.qty||0)+'</td></tr>';
+  document.getElementById("printBill").innerHTML=`<div class="print-head"><h1>TAILORING BILL</h1><p>Order No: <b>${b.orderNo}</b></p></div><div class="print-meta"><div><b>Date:</b> ${b.date||"-"}</div><div><b>Customer:</b> ${b.name||"-"}</div><div><b>Mobile:</b> ${b.contact||"-"}</div><div><b>Trial:</b> ${b.trialDate||"-"}</div><div><b>Delivery:</b> ${b.deliveryDate||"-"}</div><div><b>Delivered:</b> ${b.deliveredDate||"-"}</div></div><table class="print-table"><thead><tr><th>Item</th><th>Qty</th></tr></thead><tbody>${itemRows}</tbody></table><div class="print-total"><div><span>Bill Amount</span><b>${money(b.billAmt)}</b></div><div><span>Paid</span><b>${money(b.paid)}</b></div><div><span>Due</span><b>${money(getDue(b))}</b></div><div><span>Payment</span><b>${b.payment||"-"}</b></div></div><div style="margin-top:8px;font-size:10px"><b>Remark:</b> ${b.remark||"-"}</div><div class="print-footer">Thank you. Please keep this bill for collection/delivery.</div>`;
+  window.print();
+}
+
+function cancelBill(no){const b=bills.find(x=>String(x.orderNo)===String(no));if(!b||b.status==="Cancelled")return;if(!confirm(`Cancel Bill #${b.orderNo} for ${b.name}?\n\nThe bill will remain in history as Cancelled and will not count toward active dues or deliveries.`))return;b.status="Cancelled";localStorage.setItem("tailorBills",JSON.stringify(bills));renderBills();renderDeliveries();renderDues();renderCustomers();renderReport();updateDashboard();}
+function renderDues(){
+  const rows=bills.filter(b=>b.status!=="Cancelled"&&getDue(b)>0);
+  document.getElementById("dueTable").innerHTML=rows.map(b=>`<tr><td>${b.orderNo}</td><td>${b.date}</td><td>${b.name}</td><td>${b.contact}</td><td>${money(b.billAmt)}</td><td>${money(b.paid)}</td><td class="due">${money(getDue(b))}</td><td><button class="secondary" onclick="collect('${b.orderNo}')">Collect</button></td></tr>`).join("")||emptyRow(8);
+}
+function collect(no){const b=bills.find(x=>String(x.orderNo)===String(no));if(!b)return;const amount=prompt("Current due: "+money(getDue(b))+"\nEnter payment amount:");if(amount===null)return;const p=Number(amount);if(!p||p<0||p>getDue(b))return alert("Enter a valid amount.");b.paid+=p;b.due=getDue(b);b.paidDate=today();localStorage.setItem("tailorBills",JSON.stringify(bills));renderDues();updateDashboard()}
+function renderReport(){
+  const from=document.getElementById("fromDate").value,to=document.getElementById("toDate").value;
+  if(!from||!to)return alert("Select From and To dates.");
+  if(from>to)return alert("From date cannot be after To date.");
+  const allRows=bills.filter(b=>b.date>=from&&b.date<=to);
+  const showCancelled=document.getElementById("showCancelledReports")?.checked!==false;
+  const rows=showCancelled?allRows:allRows.filter(b=>String(b.status||"").toLowerCase()!=="cancelled");
+  const activeRows=allRows.filter(b=>String(b.status||"").toLowerCase()!=="cancelled");
+  const cancelledRows=allRows.filter(b=>String(b.status||"").toLowerCase()==="cancelled");
+  const bill=activeRows.reduce((s,b)=>s+Number(b.billAmt||0),0),paid=activeRows.reduce((s,b)=>s+Number(b.paid||0),0),due=activeRows.reduce((s,b)=>s+getDue(b),0);
+  document.getElementById("reportSummary").innerHTML=`<div class="cards"><div class="card"><small>Orders Shown</small><h2>${rows.length}</h2></div><div class="card"><small>Active Bill Amount</small><h2>${money(bill)}</h2></div><div class="card"><small>Active Paid</small><h2>${money(paid)}</h2></div><div class="card"><small>Active Due</small><h2>${money(due)}</h2></div></div><div class="muted" style="margin-top:10px">Cancelled bills in date range: <strong>${cancelledRows.length}</strong> — included in the report for history, but excluded from active totals.</div>`;
+  document.getElementById("reportTable").innerHTML=rows.map(b=>{const cancelled=String(b.status||"").toLowerCase()==="cancelled";return `<tr${cancelled?' style="opacity:.75;background:#fff7f7"':''}><td>${b.orderNo}</td><td>${b.date}</td><td>${b.name}</td><td>${b.qty}</td><td>${money(b.billAmt)}</td><td>${money(b.paid)}</td><td class="${b.due?'due':''}">${money(getDue(b))}</td><td><span class="pill" style="${cancelled?'background:#fee2e2;color:#991b1b':''}">${b.status||'Pending'}</span></td></tr>`}).join("")||emptyRow(8);
+}
+
+function exportReportExcel(){
+  const from=document.getElementById("fromDate").value,to=document.getElementById("toDate").value;
+  if(!from||!to)return alert("Select From and To dates.");
+  if(from>to)return alert("From date cannot be after To date.");
+  if(typeof XLSX==="undefined")return alert("Excel export library could not be loaded. Please check your internet connection and try again.");
+
+  const rows=bills.filter(b=>b.date>=from&&b.date<=to);
+  const detailRows=rows.map(b=>{
+    const itemCols={};
+    clothes.forEach(c=>itemCols[c]=Number((b.items||{})[c]||0));
+    return {
+      "Order No":b.orderNo,
+      "Bill Date":b.date,
+      "Customer":b.name,
+      "Mobile":b.contact||"",
+      ...itemCols,
+      "Total Qty":Number(b.qty||0),
+      "Trial Date":b.trialDate||"",
+      "Delivery Date":b.deliveryDate||"",
+      "Delivered Date":b.deliveredDate||"",
+      "Bill Amount":Number(b.billAmt||0),
+      "Paid":Number(b.paid||0),
+      "Due":getDue(b),
+      "Payment Mode":b.payment||"",
+      "Paid Date":b.paidDate||"",
+      "Status":b.status||"",
+      "Remark":b.remark||""
+    };
+  });
+
+  const activeRows=rows.filter(b=>String(b.status||"").toLowerCase()!=="cancelled");
+  const totalBill=activeRows.reduce((s,b)=>s+Number(b.billAmt||0),0);
+  const totalPaid=activeRows.reduce((s,b)=>s+Number(b.paid||0),0);
+  const totalDue=activeRows.reduce((s,b)=>s+getDue(b),0);
+  const modes={};
+  activeRows.forEach(b=>{
+    const mode=b.payment||"Not specified";
+    if(!modes[mode])modes[mode]={orders:0,bill:0,paid:0,due:0};
+    modes[mode].orders++;
+    modes[mode].bill+=Number(b.billAmt||0);
+    modes[mode].paid+=Number(b.paid||0);
+    modes[mode].due+=getDue(b);
+  });
+
+  const summary=[
+    ["TAILORING BILLING SYSTEM - DATE REPORT"],
+    ["From Date",from,"To Date",to],
+    [],
+    ["Metric","Value"],
+    ["Total Orders (Active)",activeRows.length],
+    ["Cancelled Orders",rows.length-activeRows.length],
+    ["Total Orders (All)",rows.length],
+    ["Total Bill",totalBill],
+    ["Total Paid",totalPaid],
+    ["Total Due",totalDue],
+    [],
+    ["Payment Mode","Orders","Bill Amount","Paid","Due"],
+    ...Object.entries(modes).map(([mode,v])=>[mode,v.orders,v.bill,v.paid,v.due])
+  ];
+
+  const wb=XLSX.utils.book_new();
+  const ws1=XLSX.utils.json_to_sheet(detailRows);
+  const ws2=XLSX.utils.aoa_to_sheet(summary);
+
+  // Useful column widths
+  ws1["!cols"]=[
+    {wch:10},{wch:12},{wch:22},{wch:15},
+    ...clothes.map(c=>({wch:12})),
+    {wch:10},{wch:12},{wch:14},{wch:18},{wch:18},{wch:18},{wch:14},{wch:28},{wch:14},{wch:12},{wch:12},{wch:14},{wch:12},{wch:24}
+  ];
+  ws2["!cols"]=[{wch:20},{wch:16},{wch:18},{wch:16},{wch:16}];
+
+  // Format money/date cells in the detail sheet
+  const detailHeaders=Object.keys(detailRows[0]||{
+    "Order No":1,"Bill Date":1,"Customer":1,"Mobile":1,...Object.fromEntries(clothes.map(c=>[c,1])),
+    "Total Qty":1,"Trial Date":1,"Delivery Date":1,"Bill Amount":1,"Paid":1,"Due":1,"Payment Mode":1,"Paid Date":1,"Status":1,"Remark":1
+  });
+  ["Bill Amount","Paid","Due"].forEach(h=>{
+    const col=XLSX.utils.decode_col(XLSX.utils.encode_col(detailHeaders.indexOf(h)));
+    for(let r=2;r<=detailRows.length+1;r++){
+      const cell=ws1[XLSX.utils.encode_cell({r:r-1,c:detailHeaders.indexOf(h)})];
+      if(cell)cell.z='#,##0.00';
+    }
+  });
+  [2,3,4,5].forEach(c=>{
+    for(let r=2;r<=summary.length;r++){
+      const cell=ws2[XLSX.utils.encode_cell({r:r-1,c:c})];
+      if(cell)cell.z='#,##0.00';
+    }
+  });
+
+  XLSX.utils.book_append_sheet(wb,ws1,"Bill Details");
+  XLSX.utils.book_append_sheet(wb,ws2,"Summary");
+
+  const safeFrom=from.replaceAll("-","");
+  const safeTo=to.replaceAll("-","");
+  XLSX.writeFile(wb,`Tailoring_Report_${safeFrom}_to_${safeTo}.xlsx`);
+}
+function renderCustomers(){
+  const q=(document.getElementById("customerSearch")?.value||"").toLowerCase(), map={};
+  bills.filter(b=>b.status!=="Cancelled").forEach(b=>{const key=b.contact||b.name;if(!map[key])map[key]={name:b.name,contact:b.contact,orders:0,bill:0,due:0};map[key].orders++;map[key].bill+=b.billAmt;map[key].due+=getDue(b)});
+  const rows=Object.values(map).filter(c=>(c.name+" "+c.contact).toLowerCase().includes(q));
+  document.getElementById("customerTable").innerHTML=rows.map(c=>`<tr><td>${c.name}</td><td>${c.contact}</td><td>${c.orders}</td><td>${money(c.bill)}</td><td class="${c.due?'due':''}">${money(c.due)}</td></tr>`).join("")||emptyRow(5);
+}
+function emptyRow(n){return `<tr><td colspan="${n}" class="muted">No records found.</td></tr>`}
+function updateDashboard(){
+  const t=today(), tb=bills.filter(b=>b.date===t&&b.status!=="Cancelled"), del=bills.filter(b=>b.deliveryDate===t&&b.status!=="Delivered"&&b.status!=="Cancelled");
+  document.getElementById("dBills").textContent=tb.length;
+  document.getElementById("dCollection").textContent=money(tb.reduce((s,b)=>s+b.paid,0));
+  document.getElementById("dDeliveries").textContent=del.length;
+  document.getElementById("dDue").textContent=money(bills.filter(b=>b.status!=="Cancelled").reduce((s,b)=>s+getDue(b),0));
+}
+if(sessionStorage.getItem("loggedIn")){document.getElementById("login").classList.add("hidden");document.getElementById("app").classList.remove("hidden");init();}
+</script>
+</body>
+</html>
